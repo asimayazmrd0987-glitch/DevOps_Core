@@ -6,3 +6,4 @@ sudo useradd -m "$username"
 echo "$username is added"
 sudo userdel -r "$username"
 echo "$username is deleted"
+cat /etc/passwd
