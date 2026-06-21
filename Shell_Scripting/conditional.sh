@@ -2,7 +2,7 @@
 
 read -p "Enter the kernel you use :" kernel
 
-if [[ "$kernel" == "7" || "$kernel" =~ ^7./[0-9]+$ ]];
+if [[ "$kernel" -ge "7" ]];
 then 
 	echo "You are Legend "
 else
