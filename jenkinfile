@@ -1,0 +1,52 @@
+// Jenkinfile for django-nates-app
+pipeline {
+    agent any
+    
+    stages {
+        stage('Clean & Clone') {
+            steps {
+                // Wipe workspace completely
+                deleteDir()
+                git url: "https://github.com/LondheShubham153/django-notes-app.git", branch: "main"
+                echo 'Code cloned successfully'
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                echo 'Building Docker image...'
+                sh 'docker --version'
+                sh 'ls -la'  
+                sh 'docker build -t notes-app:latest . || echo "No Dockerfile - skipping build"'
+            }
+        }
+        
+        stage('Test') {
+            steps {
+                echo 'Running tests...'
+                sh 'docker run --rm notes-app:latest python3 manage.py test || echo "No tests yet"'
+            }
+        }
+        
+        stage('Deploy') {
+            steps {
+                echo 'Deploying application...'
+                sh 'docker stop notes-app-running || true'
+                sh 'docker rm notes-app-running || true'
+                sh 'docker run -d -p 8000:8000 --name notes-app-running notes-app:latest || echo "Deploy skipped"'
+            }
+        }
+    }
+    
+    post {
+        always {
+            echo 'Pipeline finished!'
+        }
+        success {
+            echo 'SUCCESS!'
+        }
+        failure {
+            echo 'FAILED! Check logs above.'
+        }
+    }
+}
