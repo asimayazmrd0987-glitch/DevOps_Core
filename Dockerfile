@@ -1,3 +1,3 @@
 FROM alpine:latest
 
-CMD ["echo", "Hello guys I am practicing GitHub Action"]
+CMD ["echo", "Hello guys this is for GitHub Action"]
